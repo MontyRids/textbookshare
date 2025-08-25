@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Submit a Book</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Submit a Book</h1>
+    <form id="bookForm">
+        <input type="text" name="title" placeholder="Book Title" required><br>
+        <input type="text" name="subject" placeholder="Subject" required><br>
+        <input type="text" name="edition" placeholder="Edition" required><br>
+        <input type="text" name="condition" placeholder="Condition" required><br>
+        <input type="text" name="pickup" placeholder="Pickup Location" required><br>
+        <button type="submit">Submit</button>
+    </form>
+
+    <script>
+        const form = document.getElementById('bookForm');
+        form.addEventListener('submit', async e => {
+            e.preventDefault();
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries());
+            const res = await fetch('/api/listings', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            const result = await res.json();
+            if(result.success) alert('Book added!');
+            form.reset();
+        });
+    </script>
+</body>
+</html>
